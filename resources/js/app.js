@@ -10,8 +10,7 @@ import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import Aura from '@primeuix/themes/aura';
 
-// import Aura from '@primevue/themes/aura'
-import Theme from '@primevue/themes/material'
+
 import 'primeicons/primeicons.css'
 import { provide } from 'vue';
 

@@ -2,7 +2,7 @@
 import { ref, defineProps } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import SideNavItem from '@/Components/SideNavItem.vue';
-
+import { Toast } from 'primevue';
 
 const props = defineProps({
     title: String,
@@ -16,6 +16,16 @@ const navItems = [
         name : 'Dashboard',
         icon : 'fa-solid fa-house',
         route : 'dashboard'
+    },
+    {
+        name : 'Servicios',
+        icon : 'fa-solid fa-droplet',
+        route : 'services.index'
+    },
+    {
+        name : 'Combos',
+        icon : 'fa-solid fa-box',
+        route : 'combos.index'
     }
 ];
 
@@ -25,6 +35,8 @@ const logout = () => {
 </script>
 
 <template>
+
+    <Toast />
 
     <div class="flex flex-col min-h-screen h-auto bg-gray-100">
 
@@ -64,14 +76,14 @@ const logout = () => {
                     <span class="block font-semibold mb-1">
                         {{ page.props.auth.user.username }}
                     </span>
-                    <div class="mt-2 rounded bg-gradient-to-tr from-blue-700 to-blue-400
+                    <div class="mt-2 rounded bg-gradient-to-tr from-slate-900 to-slate-700
                     shadow-md py-2 text-white font-semibold w-full uppercase">
                         ROL
                     </div>
                 </div>
             </a>
 
-            <div class="bg-gradient-to-r p-0 mb-8 from-blue-300 to-blue-500 h-px py-0"></div>
+            <div class="bg-gradient-to-r p-0 mb-8 from-slate-300 to-slate-500 h-px py-0"></div>
             <div class="*:py-2 *:pl-4 *:pr-6 *:my-2 *:rounded-l-lg *:transition *:duration-200 *:block">
 
                 <SideNavItem v-for="item in navItems" :key="item.route"
@@ -82,13 +94,13 @@ const logout = () => {
 
             <form method="POST" 
                 :action="route('logout')">
-                <button class="block text-gray-500 py-2  px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white mt-auto" type="submit">
+                <button class="block text-gray-500 py-2  px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-slate-900 hover:to-slate-900 hover:text-white mt-auto" type="submit">
                     <i class="fa-solid fa-right-from-bracket "></i><span class=" ml-2">Cerrar sesión</span>
                 </button>
             </form>
 
 
-            <div class="bg-gradient-to-r from-blue-300 to-blue-500 h-px mt-2"></div>
+            <div class="bg-gradient-to-r from-slate-300 to-slate-500 h-px mt-2"></div>
         </nav>
     </div>
 
