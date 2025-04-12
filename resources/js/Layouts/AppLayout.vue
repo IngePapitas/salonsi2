@@ -1,12 +1,7 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
 import SideNavItem from '@/Components/SideNavItem.vue';
-
-
-const toast = useToast();
 
 
 const props = defineProps({
@@ -30,8 +25,6 @@ const logout = () => {
 </script>
 
 <template>
-
-<Toast />
 
     <div class="flex flex-col min-h-screen h-auto bg-gray-100">
 
