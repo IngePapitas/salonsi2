@@ -8,6 +8,7 @@ import SideNavItem from '@/Components/SideNavItem.vue';
 
 const toast = useToast();
 
+
 const props = defineProps({
     title: String,
     icon: String,
@@ -101,7 +102,7 @@ const logout = () => {
     <div class="flex-1 p-4 w-full md:w-1/2">
         <div class="mt-1  flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
             <div class="flex-1 pt-4 md:p-4 w-full flex flex-col h-full">
-                <h1 class="opacity-85"><i :class="props.icon + ' mr-1'"></i> {{ props.title }}</h1>
+                <h1 class="text-2xl font-bold opacity-75"><i :class="props.icon + ' mr-1'"></i> {{ props.title }}</h1>
                 <slot />
             </div>
         </div>
