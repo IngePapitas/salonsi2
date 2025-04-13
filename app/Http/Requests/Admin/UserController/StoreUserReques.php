@@ -24,6 +24,7 @@ class StoreUserReques extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'role_id' => ['required', 'exists:roles,id'],
             'password' => [
                 'required',
                 'confirmed', // requiere que haya un campo password_confirmation
@@ -42,6 +43,9 @@ class StoreUserReques extends FormRequest
             'email.email' => 'El correo electrónico debe tener un formato válido.',
             'email.max' => 'El correo electrónico no debe superar los 255 caracteres.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
+
+            'role_id.required' => 'Debe seleccionar un rol para el usuario.',
+            'role_id.exists' => 'El rol seleccionado no es válido.',
 
             'password.required' => 'La contraseña es obligatoria.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',

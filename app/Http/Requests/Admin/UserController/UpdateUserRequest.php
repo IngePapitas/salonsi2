@@ -31,6 +31,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->id],
+            'role_id' => ['required', 'exists:roles,id'],
         ];
     }
 
@@ -41,6 +42,8 @@ class UpdateUserRequest extends FormRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'Debe proporcionar un correo electrónico válido.',
             'email.unique' => 'Este correo ya está registrado.',
+            'role_id.required' => 'Debe seleccionar un rol para el usuario.',
+            'role_id.exists' => 'El rol seleccionado no es válido.',
         ];
     }
 }

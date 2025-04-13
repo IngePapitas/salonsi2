@@ -6,7 +6,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
-// import Select from "primevue/select";
+import Select from "primevue/select";
 import { useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 
@@ -21,7 +21,7 @@ const selectedUser = ref(null);
 const createUserForm = useForm({
     name: "",
     email: "",
-    role: null,
+    role_id: null,
     password: "",
     password_confirmation: "",
 });
@@ -29,6 +29,7 @@ const editUserForm = useForm({
     id: null,
     name: "",
     email: "",
+    role_id: null,
 });
 const toast = useToast();
 
@@ -37,6 +38,7 @@ const openEditModal = (user) => {
     editUserForm.id = user.id;
     editUserForm.name = user.name;
     editUserForm.email = user.email;
+    editUserForm.role_id = user.roles[0]?.id;
     isEditModalOpen.value = true;
 };
 
@@ -53,6 +55,7 @@ const submitCreateUser = () => {
                 detail: "Usuario creado correctamente",
             });
             isOpenModal.value = false;
+            createUserForm.reset();
         },
         onError: (error) => {
             createUserForm.errors = error;
@@ -101,6 +104,7 @@ const submitEditUser = () => {
                 life: 5000,
             });
             isEditModalOpen.value = false;
+            editUserForm.reset();
         },
         onError: (error) => {
             Object.values(error)
@@ -120,122 +124,154 @@ const submitEditUser = () => {
 
 <template>
     <AppLayout title="Usuarios">
-        <div class="flex justify-between my-5">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Gestionar usuarios
-            </h2>
-            <Button
-                label="Crear Usuarios"
-                @click="() => (isOpenModal = true)"
-            />
-        </div>
+        <div class="mt-4 bg-white shadow-md p-4 rounded-lg">
+            <div class="flex justify-between my-5">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Gestionar usuarios
+                </h2>
+                <Button
+                    label="Crear Usuarios"
+                    @click="() => (isOpenModal = true)"
+                />
+            </div>
 
-        <div class="card">
-            <DataTable :value="users" tableStyle="min-width: 50rem">
-                <Column field="id" header="Codigo"></Column>
-                <Column field="name" header="Nombre"></Column>
-                <Column field="email" header="Correo"></Column>
-                <Column header="Rol">
-                    <template #body="{ data }">{{
-                        data.roles[0]?.name
-                    }}</template></Column
-                >
-                <Column header="Acciones">
-                    <template #body="{ data }">
-                        <Button
-                            label="Editar"
-                            icon="pi pi-pencil"
-                            @click="() => openEditModal(data)"
-                            class="p-button-sm"
+            <div class="card">
+                <DataTable :value="users" tableStyle="min-width: 50rem">
+                    <Column field="id" header="Codigo"></Column>
+                    <Column field="name" header="Nombre"></Column>
+                    <Column field="email" header="Correo"></Column>
+                    <Column header="Rol">
+                        <template #body="{ data }">{{
+                            data.roles[0]?.name
+                        }}</template></Column
+                    >
+                    <Column header="Acciones">
+                        <template #body="{ data }">
+                            <Button
+                                label="Editar"
+                                icon="pi pi-pencil"
+                                @click="() => openEditModal(data)"
+                                class="p-button-sm"
+                            />
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
+
+            <Dialog
+                v-model:visible="isOpenModal"
+                class="py-5 px-2"
+                header="Creando Usuario"
+                :style="{ width: '25rem' }"
+            >
+                <form @submit.prevent="submitCreateUser">
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="name">Nombre</label>
+                        <InputText
+                            id="name"
+                            type="text"
+                            placeholder="Nombre del usuario"
+                            v-model="createUserForm.name"
                         />
-                    </template>
-                </Column>
-            </DataTable>
+                    </div>
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="email">Correo</label>
+                        <InputText
+                            id="email"
+                            type="email"
+                            placeholder="user@correo.com"
+                            v-model="createUserForm.email"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="email">Rol</label>
+                        <Select
+                            v-model="createUserForm.role_id"
+                            :options="roles"
+                            optionValue="id"
+                            optionLabel="name"
+                            placeholder="Selecciona el rol"
+                            class="w-full"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="password">Contraseña</label>
+                        <InputText
+                            id="password"
+                            type="password"
+                            placeholder="Contraseña"
+                            v-model="createUserForm.password"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="password">Confirmar Contraseña</label>
+                        <InputText
+                            id="password"
+                            type="password"
+                            placeholder="Confirma contraseña"
+                            v-model="createUserForm.password_confirmation"
+                        />
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <Button
+                            label="Cancelar"
+                            @click="() => (isOpenModal = false)"
+                            :loading="createUserForm.processing"
+                        />
+                        <Button
+                            label="Crear"
+                            type="submit"
+                            :loading="createUserForm.processing"
+                        />
+                    </div>
+                </form>
+            </Dialog>
+
+            <Dialog
+                v-model:visible="isEditModalOpen"
+                :header="`Editando Usuario (${selectedUser?.name})`"
+                :style="{ width: '25rem' }"
+                class="py-5 px-2"
+            >
+                <form @submit.prevent="submitEditUser">
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="edit-name">Nombre</label>
+                        <InputText id="edit-name" v-model="editUserForm.name" />
+                    </div>
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="edit-email">Correo</label>
+                        <InputText
+                            id="edit-email"
+                            v-model="editUserForm.email"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-2 mb-2">
+                        <label for="email">Rol</label>
+                        <Select
+                            v-model="editUserForm.role_id"
+                            :options="roles"
+                            optionValue="id"
+                            optionLabel="name"
+                            placeholder="Selecciona el rol"
+                            class="w-full"
+                        />
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <Button
+                            label="Cancelar"
+                            @click="() => (isEditModalOpen = false)"
+                            :loading="editUserForm.processing"
+                        />
+                        <Button
+                            label="Actualizar"
+                            type="submit"
+                            :loading="editUserForm.processing"
+                        />
+                    </div>
+                </form>
+            </Dialog>
         </div>
-
-        <Dialog v-model:visible="isOpenModal" class="py-5 px-2">
-            <h4 class="text-xl font-semibold">Creando Usuario</h4>
-
-            <form @submit.prevent="submitCreateUser">
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="name">Nombre</label>
-                    <InputText
-                        id="name"
-                        type="text"
-                        placeholder="Nombre del usuario"
-                        v-model="createUserForm.name"
-                    />
-                </div>
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="email">Correo</label>
-                    <InputText
-                        id="email"
-                        type="email"
-                        placeholder="user@correo.com"
-                        v-model="createUserForm.email"
-                    />
-                </div>
-
-                <!-- <div class="flex flex-col gap-2 mb-2">
-                    <label for="email">Rol</label>
-                    <Select
-                        v-model="createUserForm.role"
-                        :options="roles"
-                        optionValue="id"
-                        optionLabel="name"
-                        placeholder="Selecciona el rol"
-                        class="w-full md:w-56"
-                    />
-                </div> -->
-
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="password">Contraseña</label>
-                    <InputText
-                        id="password"
-                        type="password"
-                        placeholder="Contraseña"
-                        v-model="createUserForm.password"
-                    />
-                </div>
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="password">Confirmar Contraseña</label>
-                    <InputText
-                        id="password"
-                        type="password"
-                        placeholder="Confirma contraseña"
-                        v-model="createUserForm.password_confirmation"
-                    />
-                </div>
-                <div class="flex justify-between py-2">
-                    <Button
-                        label="Cancelar"
-                        @click="() => (isOpenModal = false)"
-                    />
-                    <Button label="Crear" type="submit" />
-                </div>
-            </form>
-        </Dialog>
-
-        <Dialog v-model:visible="isEditModalOpen" class="py-5 px-2">
-            <h4 class="text-xl font-semibold">Editando Usuario</h4>
-
-            <form @submit.prevent="submitEditUser">
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="edit-name">Nombre</label>
-                    <InputText id="edit-name" v-model="editUserForm.name" />
-                </div>
-                <div class="flex flex-col gap-2 mb-2">
-                    <label for="edit-email">Correo</label>
-                    <InputText id="edit-email" v-model="editUserForm.email" />
-                </div>
-                <div class="flex justify-between py-2">
-                    <Button
-                        label="Cancelar"
-                        @click="() => (isEditModalOpen = false)"
-                    />
-                    <Button label="Actualizar" type="submit" />
-                </div>
-            </form>
-        </Dialog>
     </AppLayout>
 </template>

@@ -28,18 +28,24 @@ class UserController extends Controller
     public function store(StoreUserReques $request)
     {
         $validated = $request->validated();
-        User::create([
+
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']), // ← misma encriptación que Jetstream
         ]);
+
+        $user->assignRole($validated['role_id']);
 
         return to_route('admin.users.index')->with('success', 'Usuario creado exitosamente.');
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->validated());
+        $validated = $request->validated();
+
+        $user->update($validated);
+        $user->assignRole($validated['role_id']);
 
         return to_route('admin.users.index')
             ->with('success', 'Usuario actualizado correctamente.');

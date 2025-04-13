@@ -23,13 +23,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'),])->group(fu
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    Route::get('/services/get-list', [ServiceController::class, 'getList'])->name('services.get-list');
+    Route::resource('/services', ServiceController::class);
+    Route::resource('/combos', ComboController::class);
+
     Route::prefix('admin')
         ->name('admin.')
         ->group(function () {
             Route::resource('users', Admin\UserController::class);
         });
-
-    Route::get('/services/get-list', [ServiceController::class, 'getList'])->name('services.get-list');
-    Route::resource('/services', ServiceController::class);
-    Route::resource('/combos', ComboController::class);
 });
