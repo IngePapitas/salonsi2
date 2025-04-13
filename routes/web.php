@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -13,6 +14,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum',config('jetstream.auth_session'),])->group(function () {
-    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'),])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::prefix('admin')
+        ->name('admin.')
+        ->group(function () {
+            Route::resource('users', Admin\UserController::class);
+        });
 });
