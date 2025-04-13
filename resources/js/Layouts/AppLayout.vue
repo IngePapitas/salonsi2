@@ -19,9 +19,14 @@ const navItems = [
         route: "dashboard",
     },
     {
-        name: "Gestionar usuarios",
+        name: "Gestionar Usuarios",
         icon: "fa-solid fa-users",
         route: `${adminRoute}.users.index`,
+    },
+    {
+        name: "Gestionar Roles y Permisos",
+        icon: "fa-solid fa-users",
+        route: `${adminRoute}.roles.index`,
     },
     {
         name: "Servicios",
