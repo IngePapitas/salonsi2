@@ -16,6 +16,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                bebas: ['"Bebas Neue"', 'cursive'],
             },
         },
     },

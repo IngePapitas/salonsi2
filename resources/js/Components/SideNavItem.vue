@@ -2,8 +2,8 @@
     <button 
         @click="goTo(name)" 
         :class="[
-            'hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white w-full text-start',
-            isActive ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' : ''
+            'hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white w-full text-start',
+            isActive ? 'bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-md' : ''
         ]"
     >
         <i :class="icon"></i>

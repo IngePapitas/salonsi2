@@ -1,11 +1,8 @@
 <script setup>
-import { ref, defineProps } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
-import SideNavItem from "@/Components/SideNavItem.vue";
-
-const toast = useToast();
+import { ref, defineProps } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import SideNavItem from '@/Components/SideNavItem.vue';
+import { Toast } from 'primevue';
 
 const props = defineProps({
     title: String,
@@ -26,6 +23,16 @@ const navItems = [
         icon: "fa-solid fa-users",
         route: `${adminRoute}.users.index`,
     },
+    {
+        name : 'Servicios',
+        icon : 'fa-solid fa-droplet',
+        route : 'services.index'
+    },
+    {
+        name : 'Combos',
+        icon : 'fa-solid fa-box',
+        route : 'combos.index'
+    }
 ];
 
 const logout = () => {
@@ -64,73 +71,43 @@ const logout = () => {
             </div>
         </div>
 
-        <div class="flex-1 flex flex-wrap">
-            <div
-                class="pl-2 bg-white text-gray-700 w-full md:w-auto transform duration-300 flex flex-col md:flex hidden min-w-72"
-                id="sideNav"
-            >
-                <nav class="sticky top-0 border-gray-200 border-r-4 h-screen">
-                    <a href="#" class="block mx-2 mt-4">
-                        <div class="flex justify-center">
-                            <i class="fa-solid fa-circle-user text-8xl"></i>
-                        </div>
-
-                        <div class="*:text-center mb-4 rounded mt-2">
-                            <span class="block font-semibold mb-1">
-                                {{ $page.props.user?.name }}
-                            </span>
-                            <div
-                                class="mt-2 rounded bg-gradient-to-tr from-blue-700 to-blue-400 shadow-md py-2 text-white font-semibold w-full uppercase"
-                            >
-                                {{ $page.props.user?.roles[0]?.name }}
-                            </div>
-                        </div>
-                    </a>
-
-                    <div
-                        class="bg-gradient-to-r p-0 mb-8 from-blue-300 to-blue-500 h-px py-0"
-                    ></div>
-                    <div
-                        class="*:py-2 *:pl-4 *:pr-6 *:my-2 *:rounded-l-lg *:transition *:duration-200 *:block"
-                    >
-                        <SideNavItem
-                            v-for="item in navItems"
-                            :key="item.route"
-                            :name="item.route"
-                            :icon="item.icon"
-                        >
-                            {{ item.name }}
-                        </SideNavItem>
-                    </div>
-
-                    <form method="POST" :action="route('logout')">
-                        <button
-                            class="block text-gray-500 py-2 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white mt-auto"
-                            type="submit"
-                        >
-                            <i class="fa-solid fa-right-from-bracket"></i
-                            ><span class="ml-2">Cerrar sesión</span>
-                        </button>
-                    </form>
-
-                    <div
-                        class="bg-gradient-to-r from-blue-300 to-blue-500 h-px mt-2"
-                    ></div>
-                </nav>
-            </div>
-
-            <div class="flex-1 p-4 w-full md:w-1/2">
-                <div
-                    class="mt-1 flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0"
-                >
-                    <div class="flex-1 pt-4 md:p-4 w-full flex flex-col h-full">
-                        <h1 class="text-2xl font-bold opacity-75">
-                            <i :class="props.icon + ' mr-1'"></i>
-                            {{ props.title }}
-                        </h1>
-                        <slot />
+                <div class=" *:text-center mb-4 rounded mt-2">
+                    <span class="block font-semibold mb-1">
+                        {{ page.props.auth.user.username }}
+                    </span>
+                    <div class="mt-2 rounded bg-gradient-to-tr from-slate-900 to-slate-700
+                    shadow-md py-2 text-white font-semibold w-full uppercase">
+                        ROL
                     </div>
                 </div>
+            </a>
+
+            <div class="bg-gradient-to-r p-0 mb-8 from-slate-300 to-slate-500 h-px py-0"></div>
+            <div class="*:py-2 *:pl-4 *:pr-6 *:my-2 *:rounded-l-lg *:transition *:duration-200 *:block">
+
+                <SideNavItem v-for="item in navItems" :key="item.route"
+                    :name='item.route' :icon='item.icon' >
+                    {{ item.name }}
+                </SideNavItem>
+            </div>
+
+            <form method="POST" 
+                :action="route('logout')">
+                <button class="block text-gray-500 py-2  px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-slate-900 hover:to-slate-900 hover:text-white mt-auto" type="submit">
+                    <i class="fa-solid fa-right-from-bracket "></i><span class=" ml-2">Cerrar sesión</span>
+                </button>
+            </form>
+
+
+            <div class="bg-gradient-to-r from-slate-300 to-slate-500 h-px mt-2"></div>
+        </nav>
+    </div>
+
+    <div class="flex-1 p-4 w-full md:w-1/2">
+        <div class="mt-1  flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
+            <div class="flex-1 pt-4 md:p-4 w-full flex flex-col h-full">
+                <h1 class="text-2xl font-bold opacity-75"><i :class="props.icon + ' mr-1'"></i> {{ props.title }}</h1>
+                <slot />
             </div>
         </div>
     </div>
