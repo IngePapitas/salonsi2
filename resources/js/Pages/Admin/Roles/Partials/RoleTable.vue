@@ -18,11 +18,11 @@ const props = defineProps({ roles: Array });
                     class="mr-2"
                     @click="emit('edit', data)"
                 />
-                <!-- <Button
+                <Button
                     icon="pi pi-trash"
                     severity="danger"
                     @click="emit('delete', data)"
-                /> -->
+                />
                 <Button
                     icon="pi pi-key"
                     severity="help"

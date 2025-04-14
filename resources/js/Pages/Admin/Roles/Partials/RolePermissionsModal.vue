@@ -3,6 +3,7 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import { useForm } from "@inertiajs/vue3";
 import { watch } from "vue";
+import { useToast } from "primevue";
 
 const props = defineProps({
     visible: Boolean,
@@ -12,6 +13,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:visible"]);
 
+const toast = useToast();
 const form = useForm({
     permissions: [],
 });
@@ -35,7 +37,14 @@ const submit = () => {
 
     form.post(route("admin.roles.permissions", { role: props.role?.id }), {
         preserveScroll: true,
-        onSuccess: () => emit("update:visible", false),
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Permisos asignado al rol exitosamente",
+                life: 4000,
+            });
+            emit("update:visible", false);
+        },
     });
 };
 </script>

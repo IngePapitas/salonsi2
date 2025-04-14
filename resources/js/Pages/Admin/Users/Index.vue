@@ -7,7 +7,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Select from "primevue/select";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 
 defineProps({
@@ -92,6 +92,20 @@ const submitCreateUser = () => {
     });
 };
 
+const deleteUser = (user) => {
+    if (confirm("¿Seguro que deseas eliminar este users?")) {
+        router.delete(route("admin.users.destroy", user.id), {
+            preserveScroll: true,
+            onSuccess: () =>
+                toast.add({
+                    severity: "success",
+                    summary: "Usuario eliminado exitosamente.",
+                    life: 4000,
+                }),
+        });
+    }
+};
+
 const submitEditUser = () => {
     editUserForm.put(route("admin.users.update", editUserForm.id), {
         preserveScroll: true,
@@ -147,12 +161,19 @@ const submitEditUser = () => {
                     >
                     <Column header="Acciones">
                         <template #body="{ data }">
-                            <Button
-                                label="Editar"
-                                icon="pi pi-pencil"
-                                @click="() => openEditModal(data)"
-                                class="p-button-sm"
-                            />
+                            <div class="flex gap-2">
+                                <Button
+                                    label="Editar"
+                                    icon="pi pi-pencil"
+                                    @click="() => openEditModal(data)"
+                                    class="p-button-sm"
+                                />
+                                <Button
+                                    icon="pi pi-trash"
+                                    severity="danger"
+                                    @click="deleteUser(data)"
+                                />
+                            </div>
                         </template>
                     </Column>
                 </DataTable>

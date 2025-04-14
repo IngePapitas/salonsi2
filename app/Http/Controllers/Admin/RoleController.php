@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
 {
@@ -23,6 +25,7 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'name' => ['required', 'string', 'max:50', 'unique:roles,name']
         ], [
@@ -30,7 +33,10 @@ class RoleController extends Controller
             'name.unique' => 'Este rol ya existe.',
         ]);
 
-        Role::create(['name' => $request->name]);
+        Role::create([
+            'name' => $request->name,
+            'guard_name' => 'web'
+        ]);
 
         return to_route('admin.roles.index');
     }
@@ -48,9 +54,20 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        // dd($role);
-        $role->delete();
-        return to_route('admin.roles.index');
+        $hasUsers = DB::table('model_has_roles')
+            ->where('role_id', $role->id)
+            ->exists();
+
+        if ($hasUsers) {
+            return back()->withErrors([
+                'msg' => 'No se puede eliminar este rol porque tiene usuarios asignados.',
+            ]);
+        }
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        DB::table('roles')->where('id', $role->id)->delete();
+
+        return to_route('admin.roles.index')->with('success', 'Rol eliminado correctamente.');
     }
 
     public function assignPermissions(Request $request, Role $role)

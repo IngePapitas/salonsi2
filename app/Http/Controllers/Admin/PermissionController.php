@@ -11,7 +11,10 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $request->validate(['name' => 'required|string|max:50|unique:permissions,name']);
-        $permission = Permission::create(['name' => $request->name]);
+        $permission = Permission::create([
+            'name' => $request->name,
+            'guard_name' => 'web'
+        ]);
 
         return to_route('admin.roles.index');
     }

@@ -50,4 +50,10 @@ class UserController extends Controller
         return to_route('admin.users.index')
             ->with('success', 'Usuario actualizado correctamente.');
     }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return to_route('admin.users.index');
+    }
 }

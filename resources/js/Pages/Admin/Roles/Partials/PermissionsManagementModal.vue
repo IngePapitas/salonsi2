@@ -3,7 +3,7 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 
 const props = defineProps({ visible: Boolean, permissions: Array });
@@ -36,6 +36,7 @@ const submit = () => {
                     life: 3000,
                 });
                 form.reset();
+                isEditing.value = false;
             },
         });
     } else {
@@ -48,6 +49,20 @@ const submit = () => {
                 });
                 form.reset();
             },
+        });
+    }
+};
+
+const deletePermission = (permission) => {
+    if (confirm("¿Seguro que deseas eliminar este permiso?")) {
+        router.delete(route("admin.permissions.destroy", permission.id), {
+            preserveScroll: true,
+            onSuccess: () =>
+                toast.add({
+                    severity: "success",
+                    summary: "Permiso eliminado",
+                    life: 4000,
+                }),
         });
     }
 };
@@ -82,12 +97,19 @@ const submit = () => {
                 class="flex items-center justify-between rounded px-3 py-2 shadow-sm bg-slate-100"
             >
                 <span>{{ permission.name }}</span>
-                <Button
-                    icon="pi pi-pencil"
-                    size="small"
-                    text
-                    @click="startEdit(permission)"
-                />
+                <div>
+                    <Button
+                        icon="pi pi-pencil"
+                        size="small"
+                        text
+                        @click="startEdit(permission)"
+                    />
+                    <Button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        @click="deletePermission(permission)"
+                    />
+                </div>
             </div>
         </div>
 
