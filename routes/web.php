@@ -13,7 +13,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'services' => \App\Models\Service::all(),
+        'services' => \App\Models\Service::where('has_available', 1)->get(),
         'combos' => \App\Models\Combo::all(),
     ]);
 });

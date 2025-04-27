@@ -10,7 +10,9 @@ class Service extends Model
         'name',
         'price',
         'discount_price',
+        'specialist_id',
         'has_discount',
+        'has_available',
         'image_path'
     ];
 

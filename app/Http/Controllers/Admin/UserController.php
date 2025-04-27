@@ -32,7 +32,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']), // ← misma encriptación que Jetstream
+            'password' => Hash::make($validated['password']),
         ]);
 
         $user->assignRole($validated['role_id']);
@@ -45,7 +45,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $user->update($validated);
-        $user->assignRole($validated['role_id']);
+        $user->syncRoles($validated['role_id']);
 
         return to_route('admin.users.index')
             ->with('success', 'Usuario actualizado correctamente.');
