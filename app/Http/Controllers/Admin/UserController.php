@@ -35,7 +35,7 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        $user->assignRole($validated['role_id']);
+        $user->syncRoles($validated['role_id']);
 
         return to_route('admin.users.index')->with('success', 'Usuario creado exitosamente.');
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
@@ -19,5 +20,10 @@ class Service extends Model
     public function getImagePathAttribute($value)
     {
         return $value ? asset('storage/' . $value) : null;
+    }
+
+    public function specialist(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'specialist_id');
     }
 }

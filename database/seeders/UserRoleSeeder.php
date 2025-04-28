@@ -22,7 +22,8 @@ class UserRoleSeeder extends Seeder
 
         $roles = [
             'admin',
-            'client'
+            'client',
+            'employee'
         ];
         foreach ($roles as $role) {
             Role::create(['name' => $role]);

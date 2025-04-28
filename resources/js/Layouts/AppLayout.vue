@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineProps } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import SideNavItem from "@/Components/SideNavItem.vue";
 import { Toast } from "primevue";
 
@@ -115,15 +115,14 @@ const logout = () => {
                         </SideNavItem>
                     </div>
 
-                    <form method="POST" :action="route('logout')">
-                        <button
-                            class="block text-gray-500 py-2 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-slate-900 hover:to-slate-900 hover:text-white mt-auto"
-                            type="submit"
-                        >
-                            <i class="fa-solid fa-right-from-bracket"></i
-                            ><span class="ml-2">Cerrar sesión</span>
-                        </button>
-                    </form>
+                    <button
+                        class="block text-gray-500 py-2 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-slate-900 hover:to-slate-900 hover:text-white mt-auto"
+                        type="submit"
+                        @click="logout"
+                    >
+                        <i class="fa-solid fa-right-from-bracket"></i
+                        ><span class="ml-2">Cerrar sesión</span>
+                    </button>
 
                     <div
                         class="bg-gradient-to-r from-slate-300 to-slate-500 h-px mt-2"

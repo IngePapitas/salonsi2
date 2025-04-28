@@ -12,7 +12,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::orderBy('updated_at')->get();
+        $services = Service::orderBy('updated_at', 'desc')->with('specialist')->get();
 
         return Inertia::render('Services/index', [
             'services' => $services
@@ -21,7 +21,7 @@ class ServiceController extends Controller
 
     public function create()
     {
-        $employees = User::role('Empleado')->get();
+        $employees = User::role('employee')->get();
         return Inertia::render('Services/create',  [
             'employees' => $employees
         ]);
@@ -33,11 +33,13 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
             'discount_price' => 'nullable|numeric',
-            'specialist_id' => 'required|numeric|',
+            'specialist_id' => 'nullable|numeric',
             'has_discount' => 'boolean',
             'has_available' => 'boolean',
             'image' => 'nullable|image|max:2048',
         ]);
+
+        // Log::info("ServiceController@store data", (array) $validated);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('services', 'public');
@@ -59,7 +61,7 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        $employees = User::role('Empleado')->get();
+        $employees = User::role('employee')->get();
 
         return Inertia::render('Services/create', [
             'service' => $service,

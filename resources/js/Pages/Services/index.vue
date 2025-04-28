@@ -51,6 +51,13 @@
                         </div>
                     </template>
                 </Column>
+                <Column field="specialist" header="Especialista" sortable>
+                    <template #body="{ data }">
+                        <div class="flex justify-center">
+                            {{ data.specialist?.name ?? "No asignado" }}
+                        </div>
+                    </template>
+                </Column>
                 <Column field="image_path" header="Imagen">
                     <template #body="{ data }">
                         <img
@@ -63,23 +70,29 @@
                 </Column>
                 <Column header="Acciones">
                     <template #body="{ data }">
-                        <Button
-                            size="small"
-                            icon="fa fa-pencil"
-                            @click="
-                                $inertia.get(route('services.edit', data.id))
-                            "
-                        ></Button>
-                        <Button
-                            size="small"
-                            icon="fa fa-trash"
-                            class="ml-2"
-                            @click="
-                                $inertia.delete(
-                                    route('services.destroy', data.id)
-                                )
-                            "
-                        ></Button>
+                        <div
+                            class="flex flex-col sm:flex-row justify-center items-center gap-2"
+                        >
+                            <Button
+                                size="small"
+                                icon="fa fa-pencil"
+                                @click="
+                                    $inertia.get(
+                                        route('services.edit', data.id)
+                                    )
+                                "
+                            ></Button>
+                            <Button
+                                size="small"
+                                icon="fa fa-trash"
+                                class="ml-2"
+                                @click="
+                                    $inertia.delete(
+                                        route('services.destroy', data.id)
+                                    )
+                                "
+                            ></Button>
+                        </div>
                     </template>
                 </Column>
             </DataTable>

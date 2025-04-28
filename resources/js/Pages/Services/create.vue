@@ -128,7 +128,13 @@ const props = defineProps({
 
 const toast = useToast();
 
-const service = ref(props?.service);
+const service = ref({
+    ...props?.service,
+    has_discount: props.service?.has_discount === 1 ? true : false,
+    has_available: props.service?.has_available === 1 ? true : false,
+    price: props.service.price ?? 0,
+    discount_price: props.service.discount_price ?? 0,
+});
 const isSummit = ref(false);
 const selectedImage = ref(null);
 
@@ -226,16 +232,15 @@ const submit = () => {
 };
 
 onMounted(() => {
-    if (service.value && service.value.has_discount == 1) {
-        service.value.has_discount = true;
-    } else {
-        service.value.has_discount = false;
-    }
-
-    if (service.value && service.value.has_available == 1) {
-        service.value.has_available = true;
-    } else {
-        service.value.has_available = false;
-    }
+    // if (service.value && service.value.has_discount == 1) {
+    //     service.value.has_discount = true;
+    // } else {
+    //     service.value.has_discount = false;
+    // }
+    // if (service.value && service.value.has_available == 1) {
+    //     service.value.has_available = true;
+    // } else {
+    //     service.value.has_available = false;
+    // }
 });
 </script>
